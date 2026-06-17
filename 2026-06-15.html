@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CTRL · PROMPT TRENDWATCH · 15 JUN 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#020609; --ink-blue:#0d1e2e; --ink-soft:#11232f; --line:#1d3344;
+    --white:#fff; --muted:#84848f; --paper:#d0d4d7;
+    --cyan:#46e6ff; --mag:#c66bff; --lime:#caff4d;
+    --good:#5ad17a; --warn:#f5b34a; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--white);font-family:'Unbounded',sans-serif;letter-spacing:-0.04em;line-height:1.05;overflow-x:hidden}
+  .bg{position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(60% 50% at 18% 8%, rgba(70,230,255,.16), transparent 60%),
+      radial-gradient(55% 45% at 88% 18%, rgba(198,107,255,.15), transparent 60%),
+      radial-gradient(70% 60% at 55% 100%, rgba(202,255,77,.06), transparent 70%),
+      linear-gradient(160deg,#06121c,#0d1e2e 40%,#091722 70%,#040a10);
+    background-size:200% 200%;animation:drift 26s ease-in-out infinite}
+  @keyframes drift{0%{background-position:0 0}50%{background-position:100% 60%}100%{background-position:0 0}}
+  .grain{position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>')}
+  .wrap{max-width:1200px;margin:0 auto;padding:34px 26px 90px}
+  a{color:inherit}
+
+  .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:16px;flex-wrap:wrap;gap:12px}
+  .top .l b{font-size:15px;font-weight:900}
+  .top .l span{color:var(--muted);font-size:11px;display:block;margin-top:5px;letter-spacing:0}
+  .top .r{text-align:right;font-size:10px;color:var(--muted);line-height:1.7;text-transform:uppercase;letter-spacing:.08em}
+  .top .r b{color:var(--white)}
+
+  h1{font-size:clamp(44px,8.5vw,108px);font-weight:900;line-height:.86;margin:28px 0 6px;text-transform:uppercase}
+  h1 .dim{color:var(--muted)}
+  h1 .grad{background:linear-gradient(100deg,var(--cyan),var(--mag) 55%,var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:hue 8s linear infinite}
+  @keyframes hue{to{background-position:200% center}}
+  .sub{color:var(--muted);font-size:13px;max-width:680px;line-height:1.5;letter-spacing:0;margin-bottom:26px}
+  .sub b{color:var(--white);font-weight:600}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:8px}
+  @media(max-width:820px){.strip{grid-template-columns:repeat(2,1fr)}}
+  .stat{border:1px solid var(--line);border-radius:13px;padding:14px;background:rgba(17,35,47,.5)}
+  .stat .n{font-size:26px;font-weight:900}
+  .stat .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:5px;line-height:1.4}
+
+  h3.lane{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.18em;margin:0}
+  .lanehead{display:flex;align-items:baseline;gap:14px;margin:46px 0 16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .lanehead .meta{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-left:auto}
+
+  /* criteria */
+  .crit{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  @media(max-width:820px){.crit{grid-template-columns:repeat(2,1fr)}}
+  .crit .c{border:1px solid var(--line);border-radius:12px;padding:13px;background:rgba(13,30,46,.5)}
+  .crit .c b{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;display:block}
+  .crit .c span{font-size:10px;color:var(--muted);line-height:1.45;letter-spacing:0;display:block;margin-top:6px}
+  .crit .c .w{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--cyan);margin-top:7px;letter-spacing:0}
+
+  /* leaderboard */
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;padding:8px 8px;border-bottom:1px solid var(--line)}
+  td{padding:10px 8px;border-bottom:1px solid rgba(29,51,68,.5);letter-spacing:0;vertical-align:middle}
+  td.rank{font-family:'JetBrains Mono',monospace;color:var(--muted);width:28px}
+  td.title{font-weight:600;font-size:12.5px}
+  td.title small{display:block;color:var(--muted);font-weight:400;font-size:10px;margin-top:2px;letter-spacing:0}
+  td.num{font-family:'JetBrains Mono',monospace;color:var(--cyan);white-space:nowrap}
+  .tg{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:5px;white-space:nowrap}
+  .t-reach{background:rgba(70,230,255,.14);color:var(--cyan)}
+  .t-share{background:rgba(198,107,255,.16);color:#e9c6ff}
+  .t-save{background:rgba(202,255,77,.14);color:var(--lime)}
+  .t-fast{background:rgba(245,179,74,.16);color:var(--warn)}
+  .t-innov{background:rgba(90,209,122,.16);color:var(--good)}
+  .ch{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .new{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--lime);border:1px solid rgba(202,255,77,.4);border-radius:4px;padding:1px 4px;margin-left:6px;letter-spacing:.04em}
+  .evo{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--warn);border:1px solid rgba(245,179,74,.4);border-radius:4px;padding:1px 4px;margin-left:6px;letter-spacing:.04em}
+
+  /* card grids */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  .grid4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:1000px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  .card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(17,35,47,.45);display:flex;flex-direction:column;position:relative}
+  .card .idx{position:absolute;top:10px;left:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);z-index:2}
+  .card .media{aspect-ratio:16/10;background:#06121c;overflow:hidden}
+  .card video{width:100%;height:100%;object-fit:cover;display:block}
+  .card .pad{padding:15px}
+  .card h4{font-size:14.5px;font-weight:800;text-transform:uppercase;line-height:.98;margin-bottom:8px}
+  .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:9px}
+  .chip{border:1px solid var(--line);border-radius:30px;padding:3px 9px;font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  .v-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:0}
+  .score{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px;letter-spacing:0}
+  .s-good{background:rgba(90,209,122,.16);color:var(--good)} .s-mid{background:rgba(245,179,74,.16);color:var(--warn)} .s-low{background:rgba(255,107,107,.14);color:var(--bad)}
+  .why{color:var(--muted);font-size:11.5px;line-height:1.5;letter-spacing:0;margin-bottom:9px} .why b{color:var(--white);font-weight:600}
+  pre{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.5;color:#bcd3df;background:rgba(2,6,9,.55);border:1px solid var(--line);border-radius:9px;padding:10px;white-space:pre-wrap;letter-spacing:0;max-height:150px;overflow:auto;margin-bottom:8px}
+  .src{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;text-decoration:none}.src:hover{color:var(--cyan)}
+  .copy{cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:6px;text-transform:uppercase}.copy:hover{color:var(--cyan);border-color:var(--cyan)}
+
+  .take{margin:46px 0 10px;border:1px solid rgba(198,107,255,.4);border-radius:18px;padding:28px;background:linear-gradient(120deg,rgba(198,107,255,.08),rgba(70,230,255,.05))}
+  .take .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#e9c6ff}
+  .take p{font-size:clamp(17px,2.3vw,25px);font-weight:600;line-height:1.2;text-transform:uppercase;margin-top:12px;color:var(--muted)}
+  .take p b{color:var(--white);font-weight:800}
+  footer{margin-top:48px;border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="grain"></div>
+<div class="wrap">
+
+  <div class="top">
+    <div class="l"><b>CTRL · PROMPT TRENDWATCH</b><span>Daily AI-prompt trend radar · multi-channel · scored by Visual Prompt OS</span></div>
+    <div class="r">EDITION <b>15 JUN 2026</b><br>TikTok · Instagram · Higgsfield · Web<br>Posts scanned: <b>93</b> · Hashtags: <b>9</b> · Presets: <b>50</b></div>
+  </div>
+
+  <h1><span class="dim">WHAT THE</span><br>FEED IS <span class="grad">STEALING</span><br><span class="dim">TODAY</span></h1>
+  <div class="sub">Monday wheel: <b>TikTok (#higgsfield #nanobanana #aivideo #sora2 #veo3 #aifilmmaking — 78 posts)</b>, <b>Instagram reels (#veo3 #sora2 #aifilmmaking — 15)</b>, the refreshed <b>Higgsfield preset library (50)</b>, and a Ring-2/3 sweep (PJ Ace · Dave Clark · prompt banks). Ranked by 6-factor <b>TrendScore</b>, deduped against the ledger, decoded and scored through the <b>CTRL Visual Prompt OS</b>. <b>16 net-new fingerprints</b> this edition.</div>
+
+  <div class="strip">
+    <div class="stat"><div class="n">16.6M</div><div class="k">Top NEW reach (AI short drama)</div></div>
+    <div class="stat"><div class="n">25.5K</div><div class="k">Fastest fresh riser (views/day)</div></div>
+    <div class="stat"><div class="n">16</div><div class="k">Net-new fingerprints added</div></div>
+    <div class="stat"><div class="n">6.8%</div><div class="k">Top share-rate (AI Aunties)</div></div>
+    <div class="stat"><div class="n">75</div><div class="k">Best static-prompt score</div></div>
+  </div>
+
+  <!-- CRITERIA -->
+  <div class="lanehead"><h3 class="lane">Scoring model · TrendScore</h3><span class="meta">how we rank</span></div>
+  <div class="crit">
+    <div class="c"><b>Velocity</b><span>Views ÷ days since posted. How fast it's climbing, not just totals.</span><div class="w">35%</div></div>
+    <div class="c"><b>Reach</b><span>Raw views (log-scaled). Ceiling of attention.</span><div class="w">15%</div></div>
+    <div class="c"><b>Shareability 🔁</b><span>Shares ÷ views. Does it travel person-to-person?</span><div class="w">20%</div></div>
+    <div class="c"><b>Save-worthiness 💾</b><span>Saves ÷ views. "I'll use this later" — intent to recreate.</span><div class="w">15%</div></div>
+    <div class="c"><b>Conversation 🗣</b><span>Comments ÷ views + guide-requests.</span><div class="w">5%</div></div>
+    <div class="c"><b>Novelty 💡</b><span>New tool / technique / first-of-kind. Judged, not counted.</span><div class="w">10%</div></div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="lanehead"><h3 class="lane">Cross-channel leaderboard</h3><span class="meta">Mon pull · velocity-weighted · NEW = net-new fingerprint</span></div>
+  <table>
+    <thead><tr><th>#</th><th>Signal</th><th>Channel</th><th>Views</th><th>Likes</th><th>Shares</th><th>Saves</th><th>Tag</th></tr></thead>
+    <tbody>
+      <tr><td class="rank">01</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@clipthatsh11t/video/7623593737771388181" target="_blank">"OP in another world" — AI short drama ↗</a><small>@clipthatsh11t · vertical micro-drama <span class="new">NEW</span></small></td><td class="ch">TT · #higgsfield</td><td class="num">16.6M</td><td class="num">480K</td><td class="num">22.1K</td><td class="num">78.3K</td><td><span class="tg t-reach">reach king</span></td></tr>
+      <tr><td class="rank">02</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@the.giggles.and.w/video/7637710760487046431" target="_blank">"Chihuahua's Wife" — AI-animal brainrot ↗</a><small>@the.giggles.and.w · 230K views/day <span class="new">NEW</span></small></td><td class="ch">TT · #aivideo</td><td class="num">8.5M</td><td class="num">211K</td><td class="num">33.4K</td><td class="num">27.5K</td><td><span class="tg t-fast">velocity</span></td></tr>
+      <tr><td class="rank">03</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@aidanstanik.ai/video/7609740638388620575" target="_blank">Motion Control — yourself into Game of Thrones ↗</a><small>@aidanstanik.ai <span class="new">NEW</span></small></td><td class="ch">TT · #higgsfield</td><td class="num">7.3M</td><td class="num">476K</td><td class="num">20.3K</td><td class="num">27.1K</td><td><span class="tg t-innov">technique</span></td></tr>
+      <tr><td class="rank">04</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@benkaluza.tech/video/7623072126148431126" target="_blank">Realistic AI people · NB Pro + Kling 3.0 ↗</a><small>@benkaluza.tech · already logged 14 Jun</small></td><td class="ch">TT · #nanobanana</td><td class="num">904.5K</td><td class="num">55.9K</td><td class="num">3.4K</td><td class="num">29.6K</td><td><span class="tg t-save">most-saved</span></td></tr>
+      <tr><td class="rank">05</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@livo0867/video/7629289246599253279" target="_blank">"Before we think, we ask AI" ↗</a><small>@livo0867 · 19% like-rate <span class="new">NEW</span></small></td><td class="ch">TT · #aifilmmaking</td><td class="num">710.7K</td><td class="num">137K</td><td class="num">501</td><td class="num">2.6K</td><td><span class="tg t-reach">manifesto</span></td></tr>
+      <tr><td class="rank">06</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@animalcuriosityyy/video/7618736512062049544" target="_blank">"Socrates skeleton" meme how-to ↗</a><small>@animalcuriosityyy · faceless recipe <span class="new">NEW</span></small></td><td class="ch">TT · #aivideo</td><td class="num">683.7K</td><td class="num">19K</td><td class="num">1.9K</td><td class="num">5.9K</td><td><span class="tg t-save">how-to</span></td></tr>
+      <tr><td class="rank">07</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@joshadrift/video/7612631296958844181" target="_blank">Cinema Studio V2 — real × AI blend ↗</a><small>@joshadrift · 5% save-rate <span class="new">NEW</span></small></td><td class="ch">TT · #aifilmmaking</td><td class="num">535.8K</td><td class="num">116K</td><td class="num">10.3K</td><td class="num">27.2K</td><td><span class="tg t-save">most-saved</span></td></tr>
+      <tr><td class="rank">08</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@ai.aunties/video/7641354265025400086" target="_blank">"Aunties Are Back" — Veo3 series ↗</a><small>@ai.aunties · 6.8% share-rate <span class="new">NEW</span></small></td><td class="ch">TT · #veo3</td><td class="num">308K</td><td class="num">35.5K</td><td class="num">21K</td><td class="num">4.9K</td><td><span class="tg t-share">share monster</span></td></tr>
+      <tr><td class="rank">09</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@hustle.faceless/video/7650590142167584021" target="_blank">"Any song → full music video" automatically ↗</a><small>@hustle.faceless · 3 days old <span class="new">NEW</span></small></td><td class="ch">TT · #aivideo</td><td class="num">76.6K</td><td class="num">2.6K</td><td class="num">319</td><td class="num">617</td><td><span class="tg t-fast">fastest riser</span></td></tr>
+      <tr><td class="rank">10</td><td class="title"><a class="src" style="color:#fff" href="https://www.tiktok.com/@bigfootdee/video/7649615707008732447" target="_blank">Bigfoot POV vlog ↗</a><small>@bigfootdee · fresh meme cluster <span class="new">NEW</span></small></td><td class="ch">TT · #veo3</td><td class="num">33.3K</td><td class="num">2.8K</td><td class="num">803</td><td class="num">365</td><td><span class="tg t-fast">5 days old</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- VIDEO LANE -->
+  <div class="lanehead"><h3 class="lane">① Video / Higgsfield</h3><span class="meta">fresh preset families + techniques</span></div>
+  <div class="grid">
+    <div class="card"><span class="idx">001</span>
+      <div class="media"><video src="https://cdn.higgsfield.ai/job_set_chain_preset/f8f1c41c-e872-49fc-a0b4-2e79474bdd7c.mp4" autoplay muted loop playsinline></video></div>
+      <div class="pad"><h4>Y2K Paparazzi preset family</h4>
+        <div class="row"><span class="chip">Higgsfield preset</span><span class="score s-good">💡 NEW family</span></div>
+        <div class="why"><b>2000's Paparazzi · Candid Paparazzi</b> — VHS flash, revolving hotel doors, K-pop airport walk. The <b>"you, but papped in 2003"</b> nostalgia formula. One-click, endlessly remixable.</div>
+        <a class="src" href="https://higgsfield.ai/" target="_blank">higgsfield · preset library ↗</a></div>
+    </div>
+    <div class="card"><span class="idx">002</span>
+      <div class="media"><video src="https://cdn.higgsfield.ai/job_set_chain_preset/5e2c86ff-e26b-4876-b9da-f210d9365bd6.mp4" autoplay muted loop playsinline></video></div>
+      <div class="pad"><h4>Retro game-UI / character-select family</h4>
+        <div class="row"><span class="chip">Higgsfield preset</span><span class="score s-good">💡 NEW family</span></div>
+        <div class="why"><b>Soul Fighter · Neon City · Nightline · Red Thread</b> — PS1/PS2 loading-screen & fighting-game-cover aesthetic with HUD overlays. The biggest <b>new preset cluster</b> this drop.</div>
+        <a class="src" href="https://higgsfield.ai/" target="_blank">higgsfield · preset ↗</a></div>
+    </div>
+    <div class="card"><span class="idx">003</span>
+      <div class="media"><video src="https://cdn.higgsfield.ai/job_set_chain_preset/5e16a9e6-88e1-420f-a9c3-afac13725dbd.mp4" autoplay muted loop playsinline></video></div>
+      <div class="pad"><h4>Found-footage surveillance family</h4>
+        <div class="row"><span class="chip">Higgsfield preset</span><span class="score s-mid">💡 NEW</span></div>
+        <div class="why"><b>Office CCTV · Night Vision</b> — degraded tape, timestamp glitches, green night-vision. Feeds the <b>"is this real?" found-footage</b> hook that's printing on horror/thriller pages.</div>
+        <a class="src" href="https://higgsfield.ai/" target="_blank">higgsfield · preset ↗</a></div>
+    </div>
+    <div class="card"><span class="idx">004</span>
+      <div class="media"><video src="https://cdn.higgsfield.ai/job_set_chain_preset/df9f86f6-90c8-4aa9-bbd8-4bcbfecf15c1.mp4" autoplay muted loop playsinline></video></div>
+      <div class="pad"><h4>Blockbuster-scale VFX family</h4>
+        <div class="row"><span class="chip">Higgsfield preset</span><span class="score s-mid">💡 NEW</span></div>
+        <div class="why"><b>Storm Giant · Orbital Presence</b> — anamorphic giant deflecting a jet, satellite-to-intimate scale jumps. The <b>"impossible opening shot"</b> spectacle play.</div>
+        <a class="src" href="https://higgsfield.ai/" target="_blank">higgsfield · preset ↗</a></div>
+    </div>
+    <div class="card"><span class="idx">005</span>
+      <div class="media"><video src="https://cdn.higgsfield.ai/job_set_chain_preset/6ccb03fb-ec59-46bd-a3a3-5cdb591807cc.mp4" autoplay muted loop playsinline></video></div>
+      <div class="pad"><h4>K-pop broadcast family</h4>
+        <div class="row"><span class="chip">Higgsfield preset</span><span class="score s-mid">💡 NEW</span></div>
+        <div class="why"><b>Red Carpet · Ending Fairy · Fan Meeting</b> — idol-moment broadcast handheld, confetti, bunny-heart fansign. Built for the K-pop stan economy; high remix volume.</div>
+        <a class="src" href="https://higgsfield.ai/" target="_blank">higgsfield · preset ↗</a></div>
+    </div>
+    <div class="card"><span class="idx">006</span>
+      <div class="media"><video src="https://cdn.higgsfield.ai/job_set_chain_preset/66f59e18-c35f-4ca2-acae-158141213f68.mp4" autoplay muted loop playsinline></video></div>
+      <div class="pad"><h4>Motion Control · yourself into an iconic scene</h4>
+        <div class="row"><span class="chip">TikTok · @aidanstanik.ai</span><span class="score s-good">💡 7.3M</span></div>
+        <div class="why">Higgsfield <b>Motion Control</b> drops a real face into Game-of-Thrones-grade coverage with matched camera motion. <b>Drift Racing</b> preset (shown) is the same engine for car-chase reveals.</div>
+        <div class="v-num" style="margin-bottom:8px">▲ 7.3M views · 476K likes · 64.6K/day</div>
+        <a class="src" href="https://www.tiktok.com/@aidanstanik.ai/video/7609740638388620575" target="_blank">watch ↗</a></div>
+    </div>
+  </div>
+
+  <!-- STATIC LANE -->
+  <div class="lanehead"><h3 class="lane">② Static / Graphic</h3><span class="meta">copy-paste · CTRL score (computed, not guessed)</span></div>
+  <div class="grid">
+    <div class="card"><span class="idx">007</span><div class="pad">
+      <h4>Tiny person in giant ramen</h4>
+      <div class="row"><span class="chip">Nano Banana 2 · surreal scale</span><span class="score s-mid">CTRL 75</span></div>
+      <div class="why"><b>Top-scoring viral static today.</b> Scale-contrast + macro/tilt-shift = scroll-stopper with strong save intent. Only gap: no aspect-ratio or negatives — add <b>4:5 + "no text"</b> to clear 80.</div>
+      <pre id="p1">a hyper-realistic miniature scene of a tiny person the size of a thumb sitting on the edge of an enormous bowl of ramen, steam rising from the broth creating a warm atmospheric haze, the person dangles their feet over the edge looking down at the noodles with chopsticks resting on the bowl rim beside them, macro photography style with tilt-shift bokeh effect, warm soft overhead lighting with golden tones, photorealistic noodle strands and rich broth color, playful whimsical mood, clean composition with shallow depth of field</pre>
+      <div class="row"><button class="copy" data-t="p1">⧉ copy</button><a class="src" href="https://miraflow.ai/blog/best-nano-banana-2-prompts-2026-viral-ai-image-prompts" target="_blank">source ↗</a></div></div>
+    </div>
+    <div class="card"><span class="idx">008</span><div class="pad">
+      <h4>Reflection-in-sunglasses</h4>
+      <div class="row"><span class="chip">Nano Banana 2 · mixed-media</span><span class="score s-mid">CTRL 66</span></div>
+      <div class="why">Two worlds in one frame — face + a whole sunset in the lens. Evaluator treats the lens-reflection as <b>intentional mixed-media</b> (no style penalty). Thin on lens/gear & subject detail; add a <b>50mm + named palette</b>.</div>
+      <pre id="p2">a close-up portrait of a person wearing reflective aviator sunglasses, in the reflection of both lenses a vivid tropical beach sunset is clearly visible with palm trees and warm orange sky, the person's face is lit by warm golden hour light from the front with soft shadows under the cheekbones, shallow depth of field with the background softly blurred, photorealistic skin texture and metal frame details, the reflection in the lenses is sharp and detailed, summer editorial photography style, vibrant warm palette</pre>
+      <div class="row"><button class="copy" data-t="p2">⧉ copy</button><a class="src" href="https://miraflow.ai/blog/best-nano-banana-2-prompts-2026-viral-ai-image-prompts" target="_blank">source ↗</a></div></div>
+    </div>
+    <div class="card"><span class="idx">009</span><div class="pad">
+      <h4>AI Yearbook 2000s</h4>
+      <div class="row"><span class="chip">Nano Banana 2 · nostalgia</span><span class="score s-low">CTRL 63</span></div>
+      <div class="why">Period-flash, mottled backdrop, point-and-shoot noise — a clean nostalgia format. Loses points on <b>composition + format/negatives</b>; the lighting & style blocks are the reusable part.</div>
+      <pre id="p3">transform the uploaded photo into an authentic early 2000s high school yearbook portrait, the subject wears a classic collared shirt, mottled blue-gray studio backdrop typical of yearbook photography, flat even flash lighting with minimal shadows, slightly overexposed highlights and warm color cast, subtle digital camera noise of early-2000s point-and-shoot quality, slightly awkward but genuine yearbook smile, photorealistic period-accurate processing artifacts, preserve facial identity</pre>
+      <div class="row"><button class="copy" data-t="p3">⧉ copy</button><a class="src" href="https://miraflow.ai/blog/best-nano-banana-2-prompts-2026-viral-ai-image-prompts" target="_blank">source ↗</a></div></div>
+    </div>
+    <div class="card"><span class="idx">010</span><div class="pad">
+      <h4>"Me & my job" caricature</h4>
+      <div class="row"><span class="chip">ChatGPT · memory trend</span><span class="score s-low">CTRL 33</span></div>
+      <div class="why"><b>The viral≠good exemplar of the week.</b> All over FB/IG/TikTok — yet it's a one-liner that outsources <b>every</b> structural slot to ChatGPT's memory of you. Scores <b>33</b>: pure priors, zero reusable craft. Great party trick, not a studio asset.</div>
+      <pre id="p4">Create a caricature of me and my job based on everything you know about me.</pre>
+      <div class="row"><button class="copy" data-t="p4">⧉ copy</button><a class="src" href="https://www.cyberlink.com/blog/ai-prompts/5207/chatgpt-caricature-trend" target="_blank">source ↗</a></div></div>
+    </div>
+  </div>
+
+  <!-- ANIMATION LANE -->
+  <div class="lanehead"><h3 class="lane">③ Animation / Workflow</h3><span class="meta">multi-tool recipes · net-new</span></div>
+  <div class="grid">
+    <div class="card"><span class="idx">011</span><div class="pad">
+      <h4>Any song → full music video</h4>
+      <div class="row"><span class="chip">TikTok · @hustle.faceless</span><span class="score s-good">🚀 fastest riser</span></div>
+      <div class="why"><b>76.6K in 3 days (25.5K/day).</b> One tool ingests a track and auto-cuts a full music video — beat-synced scenes, no editor. The <b>"one input, whole deliverable"</b> pattern keeps eating manual steps.</div>
+      <div class="v-num" style="margin-bottom:8px">▲ 76.6K · 2.6K likes · posted 12 Jun</div>
+      <a class="src" href="https://www.tiktok.com/@hustle.faceless/video/7650590142167584021" target="_blank">watch ↗</a></div>
+    </div>
+    <div class="card"><span class="idx">012</span><div class="pad">
+      <h4>Old portrait → modern photo → alive</h4>
+      <div class="row"><span class="chip">Instagram · @dimon.sb.life</span><span class="score s-good">💾 70.9K plays</span></div>
+      <div class="why">Three-step revive: <b>scan a vintage portrait → Nano Banana modernises it → Veo 3 animates it.</b> Emotional payoff = high saves & shares. The strongest IG recipe in the pull.</div>
+      <pre id="p5">1 Scan/upload old family portrait
+2 Nano Banana: "restore + modernise to a natural present-day photo, keep identity"
+3 Veo 3: subtle breathing, blink, slight head turn — gentle living-portrait motion
+4 9:16, soft film grade</pre>
+      <div class="row"><button class="copy" data-t="p5">⧉ copy</button><a class="src" href="https://www.instagram.com/p/DYkQ0eVMbxI/" target="_blank">▲ 70.9K ↗</a></div></div>
+    </div>
+    <div class="card"><span class="idx">013</span><div class="pad">
+      <h4>Multi-shot storyboard (Veo 3.1)</h4>
+      <div class="row"><span class="chip">Web · PJ Ace / Veo 3.1</span><span class="score s-good">💡 craft shift</span></div>
+      <div class="why">PJ Ace's <b>Multi-Shot</b> method: define a whole sequence — each shot with its own angle, action and transition — and batch-generate as one coherent narrative. Kills the one-clip-at-a-time grind. <b>This is how ads get made now.</b></div>
+      <pre id="p6">SHOT 1 — wide establishing, slow push-in, [subject + setting]
+SHOT 2 — medium, handheld, [action beat]
+SHOT 3 — close-up, locked, [emotional beat]
+transition: match-cut on motion
+keep wardrobe + grade consistent across all shots</pre>
+      <div class="row"><button class="copy" data-t="p6">⧉ copy</button><a class="src" href="https://pjace.beehiiv.com/" target="_blank">PJ's newsletter ↗</a></div></div>
+    </div>
+  </div>
+
+  <!-- ON THE RISE -->
+  <div class="lanehead"><h3 class="lane">④ On the rise</h3><span class="meta">fresh · climbing · worth watching</span></div>
+  <div class="grid grid4">
+    <div class="card"><div class="pad">
+      <h4>Bigfoot POV vlogs</h4><div class="row"><span class="chip">TT · #veo3</span><span class="score s-mid">🚀 NEW</span></div>
+      <div class="why">A fresh <b>meme cluster</b> — first-person cryptid daily-vlog (@bigfootdee, @cromaginous "I.T. Guy"). Cheap, characterful, repeatable series format.</div>
+      <a class="src" href="https://www.tiktok.com/@bigfootdee/video/7649615707008732447" target="_blank">▲ 33.3K · 5 days ↗</a></div></div>
+    <div class="card"><div class="pad">
+      <h4>Seedance 2.0</h4><div class="row"><span class="chip">Web · model</span><span class="score s-good">💡 NEW</span></div>
+      <div class="why">Named the <b>hottest image-to-video model</b> of the moment — creators benchmarking it head-to-head vs Veo 3.1 & Kling 3.0. Watch for i2v recipe migration.</div>
+      <a class="src" href="https://freevideogenerator.io/text-to-video-leaderboard" target="_blank">leaderboard ↗</a></div></div>
+    <div class="card"><div class="pad">
+      <h4>Omni vs Veo 3.1 vs Seedance</h4><div class="row"><span class="chip">TT · multi</span><span class="score s-mid">🔁 evolved</span></div>
+      <div class="why">Yesterday's "Gemini Omni" has matured into a <b>three-way model-compare</b> meta (@denchik, @learnwithcheer). The pipeline question is now "which engine," not "is AI good."</div>
+      <a class="src" href="https://www.tiktok.com/@learnwithcheer/video/7641805970904993042" target="_blank">watch ↗</a></div></div>
+    <div class="card"><div class="pad">
+      <h4>Claude Code + Nano Banana 2</h4><div class="row"><span class="chip">TT · @theaiimpact</span><span class="score s-good">💡 meta</span></div>
+      <div class="why">NB2 as a <b>skill inside the coding agent</b> — build the site <i>and</i> generate its hero images in one loop. Small reach, big direction-of-travel signal.</div>
+      <a class="src" href="https://www.tiktok.com/@theaiimpact/video/7649273059584838932" target="_blank">watch ↗</a></div></div>
+  </div>
+
+  <!-- INSTAGRAM -->
+  <div class="lanehead"><h3 class="lane">⑤ Instagram pulse</h3><span class="meta">reels · #veo3 #aifilmmaking #sora2</span></div>
+  <div class="grid">
+    <div class="card"><div class="pad">
+      <h4>"Free NB Pro + Veo 3.1" bait</h4><div class="row"><span class="chip">IG · @sferro21</span><span class="score s-mid">🗣 9.7K comments</span></div>
+      <div class="why"><b>146.5K plays, 9.7K comments</b> — the "comment AI for the link" mechanic is still the highest-conversation format on Reels. Engagement engineering, not craft.</div>
+      <a class="src" href="https://www.instagram.com/p/DWykC9zsuO1/" target="_blank">▲ 146.5K ↗</a></div></div>
+    <div class="card"><div class="pad">
+      <h4>Logo sting / vinheta</h4><div class="row"><span class="chip">IG · @edielcosta</span><span class="score s-good">💾 NEW</span></div>
+      <div class="why"><b>ChatGPT writes the prompt → Veo 3 animates your logo</b> into a sting. 54.6K plays, big "VINHETA" comment demand. Directly sellable to brand clients.</div>
+      <a class="src" href="https://www.instagram.com/p/DY60SraRhu5/" target="_blank">▲ 54.6K ↗</a></div></div>
+    <div class="card"><div class="pad">
+      <h4>Veo3 recurring characters</h4><div class="row"><span class="chip">IG · @mohammed.alkasim.ai</span><span class="score s-mid">📸 series</span></div>
+      <div class="why">Episodic anthropomorphic story series ("Part 14") on Veo3 — the <b>serialised-character</b> playbook (same as TT's AI Aunties) ports cleanly to Reels.</div>
+      <a class="src" href="https://www.instagram.com/p/DZkzI4Dms8r/" target="_blank">▲ 34.5K · fresh ↗</a></div></div>
+  </div>
+
+  <div class="take">
+    <div class="k">⟶ CTRL take</div>
+    <p>Today the feed splits two ways. <b>Spectacle</b> still wins reach — a 16.6M AI micro-drama, 7.3M Motion-Control GoT — but the durable signal is <b>serialised characters</b> (AI Aunties, Bigfoot vlogs, episodic Veo3) and <b>one-input-whole-deliverable</b> pipelines (song→video, portrait→alive, multi-shot storyboards). Meanwhile the week's most viral <i>prompt</i> — the ChatGPT "<b>me & my job</b>" caricature — scores <b>33</b>: it rides memory, not craft. The reusable money is the <b>75-scorer</b>. <b>We steal the structure, not the screenshot.</b></p>
+  </div>
+
+  <footer>
+    <span>CTRL · ART · D — PROMPT TRENDWATCH · auto-generated · 15 Jun 2026 · 16 net-new fingerprints</span>
+    <span>Sources: TikTok + Instagram (Apify) · Higgsfield MCP · miraflow.ai · nanobanana.im · PJ Ace · web</span>
+  </footer>
+</div>
+<script>
+  document.querySelectorAll('.copy').forEach(b=>b.onclick=()=>{
+    const t=document.getElementById(b.dataset.t).innerText;
+    navigator.clipboard?.writeText(t);const o=b.innerText;b.innerText='✓ copied';setTimeout(()=>b.innerText=o,1200);
+  });
+</script>
+</body>
+</html>
